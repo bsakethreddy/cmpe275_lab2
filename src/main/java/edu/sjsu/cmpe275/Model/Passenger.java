@@ -6,6 +6,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -35,6 +36,14 @@ public class Passenger {
     @OneToMany(mappedBy = "passenger", fetch = FetchType.EAGER)
     @JsonIgnoreProperties({"price","passenger"})
     private List<Reservation> reservations;
+
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable(
+            name="flight_passengers",
+            joinColumns = {@JoinColumn(name = "passenger_id", referencedColumnName = "id", nullable = false)},
+            inverseJoinColumns = {@JoinColumn(name = "flight_number", referencedColumnName = "flightnumber", nullable = false)}
+    )
+    private List<Flight> flights = new ArrayList<>();
 
     public Passenger(String firstName, String lastName, int age, String gender, String phone) {
         this.firstName = firstName;
@@ -101,5 +110,13 @@ public class Passenger {
 
     public void setReservations(List<Reservation> reservations) {
         this.reservations = reservations;
+    }
+
+    public List<Flight> getFlights() {
+        return flights;
+    }
+
+    public void setFlights(List<Flight> flights) {
+        this.flights = flights;
     }
 }

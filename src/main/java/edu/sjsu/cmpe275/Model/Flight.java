@@ -1,6 +1,7 @@
 package edu.sjsu.cmpe275.Model;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -43,6 +44,9 @@ public class Flight {
     @OneToOne(optional = false)
     @JoinColumn(name = "planeid", referencedColumnName = "planeid")
     private Plane plane;
+
+    @ManyToMany(mappedBy = "flights", fetch = FetchType.LAZY)
+    private List<Passenger> passengers = new ArrayList<>();
 
     public long getFlightNumber() {
         return flightNumber;
@@ -116,6 +120,13 @@ public class Flight {
         this.plane = plane;
     }
 
+    public List<Passenger> getPassengers() {
+        return passengers;
+    }
+
+    public void setPassengers(List<Passenger> passengers) {
+        this.passengers = passengers;
+    }
     //    @Column(name="price")
 //    private List<Passenger> passengers;
 
